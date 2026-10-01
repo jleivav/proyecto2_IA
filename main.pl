@@ -36,6 +36,7 @@ menu :-
     writeln('7. Albumes de una decada'),
     writeln('8. Recomendar artista por genero'),
     writeln('9. Mostrar vocalistas'),
+    writeln('10. Recomendar por caracteristicas'),
     writeln('0. Salir'),
     nl,
     write('Opcion: '),
@@ -112,6 +113,13 @@ procesar_opcion("9") :-
     nl,
     menu.
 
+procesar_opcion("10") :-
+    !,
+    nl,
+    consultar_por_caracteristicas,
+    nl,
+    menu.
+
 procesar_opcion("0") :-
     !,
     nl,
@@ -125,7 +133,9 @@ procesar_opcion(_) :-
 
 
 % ------------------------------------------------------------
-% LECTURA DE ARTISTA
+% LEER ARTISTA
+% Convierte, por ejemplo:
+% "Dream Theater" -> dream_theater
 % ------------------------------------------------------------
 
 leer_artista(Artista) :-
@@ -150,7 +160,7 @@ leer_artista(Artista) :-
 
 
 % ------------------------------------------------------------
-% LECTURA DE DECADA
+% LEER DECADA
 % ------------------------------------------------------------
 
 leer_decada(Decada) :-
@@ -159,6 +169,31 @@ leer_decada(Decada) :-
     read_line_to_string(user_input, Texto),
 
     number_string(Decada, Texto).
+
+
+% ------------------------------------------------------------
+% LEER CARACTERISTICA
+% ------------------------------------------------------------
+
+leer_caracteristica(Mensaje, Caracteristica) :-
+    write(Mensaje),
+
+    read_line_to_string(user_input, Texto),
+
+    string_lower(Texto, Minuscula),
+
+    split_string(
+        Minuscula,
+        " ",
+        " ",
+        Partes
+    ),
+
+    atomic_list_concat(
+        Partes,
+        '_',
+        Caracteristica
+    ).
 
 
 % ------------------------------------------------------------
@@ -209,17 +244,6 @@ consultar_albumes :-
 
         mostrar_albumes(Albumes)
     ).
-
-
-mostrar_albumes([]).
-
-mostrar_albumes([Album-Anio | Resto]) :-
-    format(
-        '- ~w (~w)~n',
-        [Album, Anio]
-    ),
-
-    mostrar_albumes(Resto).
 
 
 % ------------------------------------------------------------
@@ -294,20 +318,29 @@ consultar_relacionados :-
 
 consultar_guitarristas :-
     findall(
-        Persona,
-        guitarrista(Persona),
+        Persona-Artista,
+        (
+            guitarrista(Persona),
+            integrante(Persona, Artista)
+        ),
         Guitarristas
     ),
 
-    writeln(
-        'Guitarristas registrados:'
-    ),
+    (
+        Guitarristas = []
+    ->
+        writeln(
+            'No se encontraron guitarristas.'
+        )
+    ;
+        writeln('Guitarristas registrados:'),
 
-    mostrar_lista(Guitarristas).
+        mostrar_personas_banda(Guitarristas)
+    ).
 
 
 % ------------------------------------------------------------
-% ARTISTAS DE UNA DECADA
+% CONSULTAR ARTISTAS DE UNA DECADA
 % ------------------------------------------------------------
 
 consultar_artistas_decada :-
@@ -315,7 +348,10 @@ consultar_artistas_decada :-
 
     findall(
         Artista,
-        artista_decada(Artista, Decada),
+        artista_decada(
+            Artista,
+            Decada
+        ),
         Lista
     ),
 
@@ -341,7 +377,7 @@ consultar_artistas_decada :-
 
 
 % ------------------------------------------------------------
-% ALBUMES DE UNA DECADA
+% CONSULTAR ALBUMES DE UNA DECADA
 % ------------------------------------------------------------
 
 consultar_albumes_decada :-
@@ -349,7 +385,10 @@ consultar_albumes_decada :-
 
     findall(
         Album,
-        album_decada(Album, Decada),
+        album_decada(
+            Album,
+            Decada
+        ),
         Lista
     ),
 
@@ -375,7 +414,7 @@ consultar_albumes_decada :-
 
 
 % ------------------------------------------------------------
-% RECOMENDAR ARTISTA
+% RECOMENDAR ARTISTA POR GENERO
 % ------------------------------------------------------------
 
 consultar_recomendacion :-
@@ -417,20 +456,121 @@ consultar_recomendacion :-
 
 consultar_vocalistas :-
     findall(
-        Persona,
-        vocalista(Persona),
+        Persona-Artista,
+        (
+            vocalista(Persona),
+            integrante(Persona, Artista)
+        ),
         Vocalistas
     ),
 
-    writeln(
-        'Vocalistas registrados:'
-    ),
+    (
+        Vocalistas = []
+    ->
+        writeln(
+            'No se encontraron vocalistas.'
+        )
+    ;
+        writeln('Vocalistas registrados:'),
 
-    mostrar_lista(Vocalistas).
+        mostrar_personas_banda(Vocalistas)
+    ).
 
 
 % ------------------------------------------------------------
-% MOSTRAR LISTAS
+% RECOMENDAR POR CARACTERISTICAS
+% ------------------------------------------------------------
+
+consultar_por_caracteristicas :-
+    writeln('Caracteristicas disponibles:'),
+    writeln(
+        'agresivo, atmosferico, complejo, energetico, epico,'
+    ),
+    writeln(
+        'experimental, melancolico, melodico, pesado,'
+    ),
+    writeln(
+        'progresivo, psicodelico, tecnico'
+    ),
+    nl,
+
+    leer_caracteristica(
+        'Primera caracteristica: ',
+        Caracteristica1
+    ),
+
+    leer_caracteristica(
+        'Segunda caracteristica: ',
+        Caracteristica2
+    ),
+
+    validar_y_recomendar(
+        Caracteristica1,
+        Caracteristica2
+    ).
+
+
+% ------------------------------------------------------------
+% VALIDAR CARACTERISTICAS Y RECOMENDAR
+% ------------------------------------------------------------
+
+validar_y_recomendar(Caracteristica1, _) :-
+    \+ caracteristica_valida(Caracteristica1),
+    !,
+
+    format(
+        'La caracteristica "~w" no esta registrada.~n',
+        [Caracteristica1]
+    ).
+
+validar_y_recomendar(_, Caracteristica2) :-
+    \+ caracteristica_valida(Caracteristica2),
+    !,
+
+    format(
+        'La caracteristica "~w" no esta registrada.~n',
+        [Caracteristica2]
+    ).
+
+validar_y_recomendar(Caracteristica1, Caracteristica2) :-
+    findall(
+        Artista,
+        recomendar_por_caracteristicas(
+            Caracteristica1,
+            Caracteristica2,
+            Artista
+        ),
+        Lista
+    ),
+
+    sort(
+        Lista,
+        Recomendaciones
+    ),
+
+    (
+        Recomendaciones = []
+    ->
+        writeln(
+            'No se encontraron artistas con ambas caracteristicas.'
+        )
+    ;
+        format(
+            'Artistas con ~w y ~w:~n',
+            [Caracteristica1, Caracteristica2]
+        ),
+
+        mostrar_lista(Recomendaciones)
+    ).
+
+
+% ============================================================
+% FUNCIONES AUXILIARES PARA MOSTRAR RESULTADOS
+% ============================================================
+
+
+% ------------------------------------------------------------
+% MOSTRAR LISTA SIMPLE
 % ------------------------------------------------------------
 
 mostrar_lista([]).
@@ -442,3 +582,33 @@ mostrar_lista([Elemento | Resto]) :-
     ),
 
     mostrar_lista(Resto).
+
+
+% ------------------------------------------------------------
+% MOSTRAR ALBUM Y ANIO
+% ------------------------------------------------------------
+
+mostrar_albumes([]).
+
+mostrar_albumes([Album-Anio | Resto]) :-
+    format(
+        '- ~w (~w)~n',
+        [Album, Anio]
+    ),
+
+    mostrar_albumes(Resto).
+
+
+% ------------------------------------------------------------
+% MOSTRAR PERSONA Y BANDA
+% ------------------------------------------------------------
+
+mostrar_personas_banda([]).
+
+mostrar_personas_banda([Persona-Artista | Resto]) :-
+    format(
+        '- ~w (~w)~n',
+        [Persona, Artista]
+    ),
+
+    mostrar_personas_banda(Resto).
