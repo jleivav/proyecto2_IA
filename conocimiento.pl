@@ -14,6 +14,12 @@ artista(dream_theater).
 artista(pink_floyd).
 artista(opeth).
 artista(porcupine_tree).
+artista(megadeth).
+artista(judas_priest).
+artista(tool).
+artista(king_crimson).
+artista(nirvana).
+artista(pearl_jam).
 
 
 % ------------------------------------------------------------
@@ -27,6 +33,12 @@ genero(dream_theater, metal_progresivo).
 genero(pink_floyd, rock_progresivo).
 genero(opeth, metal_progresivo).
 genero(porcupine_tree, rock_progresivo).
+genero(megadeth, thrash_metal).
+genero(judas_priest, heavy_metal).
+genero(tool, metal_progresivo).
+genero(king_crimson, rock_progresivo).
+genero(nirvana, grunge).
+genero(pearl_jam, grunge).
 
 
 % ------------------------------------------------------------
@@ -40,6 +52,12 @@ pais(dream_theater, estados_unidos).
 pais(pink_floyd, inglaterra).
 pais(opeth, suecia).
 pais(porcupine_tree, inglaterra).
+pais(megadeth, estados_unidos).
+pais(judas_priest, inglaterra).
+pais(tool, estados_unidos).
+pais(king_crimson, inglaterra).
+pais(nirvana, estados_unidos).
+pais(pearl_jam, estados_unidos).
 
 
 % ------------------------------------------------------------
@@ -53,6 +71,12 @@ formado_en(dream_theater, 1985).
 formado_en(pink_floyd, 1965).
 formado_en(opeth, 1990).
 formado_en(porcupine_tree, 1987).
+formado_en(megadeth, 1983).
+formado_en(judas_priest, 1969).
+formado_en(tool, 1990).
+formado_en(king_crimson, 1968).
+formado_en(nirvana, 1987).
+formado_en(pearl_jam, 1990).
 
 
 % ------------------------------------------------------------
@@ -78,6 +102,24 @@ album(opeth, damnation, 2003).
 album(porcupine_tree, in_absentia, 2002).
 album(porcupine_tree, fear_of_a_blank_planet, 2007).
 
+album(megadeth, rust_in_peace, 1990).
+album(megadeth, peace_sells, 1986).
+
+album(judas_priest, british_steel, 1980).
+album(judas_priest, painkiller, 1990).
+
+album(tool, lateralus, 2001).
+album(tool, ten_thousand_days, 2006).
+
+album(king_crimson, in_the_court_of_the_crimson_king, 1969).
+album(king_crimson, red, 1974).
+
+album(nirvana, nevermind, 1991).
+album(nirvana, in_utero, 1993).
+
+album(pearl_jam, ten, 1991).
+album(pearl_jam, vs, 1993).
+
 
 % ------------------------------------------------------------
 % INTEGRANTES
@@ -100,6 +142,19 @@ integrante(mikael_akerfeldt, opeth).
 
 integrante(steven_wilson, porcupine_tree).
 
+integrante(dave_mustaine, megadeth).
+
+integrante(rob_halford, judas_priest).
+
+integrante(maynard_james_keenan, tool).
+integrante(adam_jones, tool).
+
+integrante(robert_fripp, king_crimson).
+
+integrante(kurt_cobain, nirvana).
+
+integrante(eddie_vedder, pearl_jam).
+
 
 % ------------------------------------------------------------
 % INSTRUMENTOS
@@ -112,13 +167,16 @@ instrumento(james_hetfield, voz).
 instrumento(lars_ulrich, bateria).
 
 instrumento(bruce_dickinson, voz).
+
 instrumento(steve_harris, bajo).
 
 instrumento(john_petrucci, guitarra).
+
 instrumento(james_labrie, voz).
 
 instrumento(david_gilmour, guitarra).
 instrumento(david_gilmour, voz).
+
 instrumento(roger_waters, bajo).
 
 instrumento(mikael_akerfeldt, guitarra).
@@ -127,25 +185,50 @@ instrumento(mikael_akerfeldt, voz).
 instrumento(steven_wilson, guitarra).
 instrumento(steven_wilson, voz).
 
+instrumento(dave_mustaine, guitarra).
+instrumento(dave_mustaine, voz).
+
+instrumento(rob_halford, voz).
+
+instrumento(maynard_james_keenan, voz).
+
+instrumento(adam_jones, guitarra).
+
+instrumento(robert_fripp, guitarra).
+
+instrumento(kurt_cobain, guitarra).
+instrumento(kurt_cobain, voz).
+
+instrumento(eddie_vedder, voz).
+
 
 % ============================================================
 % REGLAS
 % ============================================================
 
 
+% ------------------------------------------------------------
+% GUITARRISTA
 % Una persona es guitarrista si toca guitarra.
+% ------------------------------------------------------------
 
 guitarrista(Persona) :-
     instrumento(Persona, guitarra).
 
 
+% ------------------------------------------------------------
+% VOCALISTA
 % Una persona es vocalista si utiliza la voz.
+% ------------------------------------------------------------
 
 vocalista(Persona) :-
     instrumento(Persona, voz).
 
 
+% ------------------------------------------------------------
+% ARTISTAS RELACIONADOS
 % Dos artistas estan relacionados si comparten genero.
+% ------------------------------------------------------------
 
 artistas_relacionados(Artista1, Artista2) :-
     genero(Artista1, Genero),
@@ -153,21 +236,30 @@ artistas_relacionados(Artista1, Artista2) :-
     Artista1 \= Artista2.
 
 
-% Un artista pertenece a una decada segun su anio de formacion.
+% ------------------------------------------------------------
+% ARTISTA POR DECADA
+% Calcula la decada segun el anio de formacion.
+% ------------------------------------------------------------
 
 artista_decada(Artista, Decada) :-
     formado_en(Artista, Anio),
     Decada is (Anio // 10) * 10.
 
 
-% Un album pertenece a una decada.
+% ------------------------------------------------------------
+% ALBUM POR DECADA
+% Calcula la decada segun el anio de lanzamiento.
+% ------------------------------------------------------------
 
 album_decada(Album, Decada) :-
     album(_, Album, Anio),
     Decada is (Anio // 10) * 10.
 
 
-% Recomienda otro artista del mismo genero.
+% ------------------------------------------------------------
+% RECOMENDACION POR GENERO
+% Recomienda artistas que comparten genero.
+% ------------------------------------------------------------
 
 recomendar_por_genero(Artista, Recomendacion) :-
     genero(Artista, Genero),

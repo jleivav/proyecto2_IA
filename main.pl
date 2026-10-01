@@ -32,6 +32,10 @@ menu :-
     writeln('3. Integrantes de una banda'),
     writeln('4. Artistas relacionados'),
     writeln('5. Mostrar guitarristas'),
+    writeln('6. Artistas de una decada'),
+    writeln('7. Albumes de una decada'),
+    writeln('8. Recomendar artista por genero'),
+    writeln('9. Mostrar vocalistas'),
     writeln('0. Salir'),
     nl,
     write('Opcion: '),
@@ -80,6 +84,34 @@ procesar_opcion("5") :-
     nl,
     menu.
 
+procesar_opcion("6") :-
+    !,
+    nl,
+    consultar_artistas_decada,
+    nl,
+    menu.
+
+procesar_opcion("7") :-
+    !,
+    nl,
+    consultar_albumes_decada,
+    nl,
+    menu.
+
+procesar_opcion("8") :-
+    !,
+    nl,
+    consultar_recomendacion,
+    nl,
+    menu.
+
+procesar_opcion("9") :-
+    !,
+    nl,
+    consultar_vocalistas,
+    nl,
+    menu.
+
 procesar_opcion("0") :-
     !,
     nl,
@@ -115,6 +147,18 @@ leer_artista(Artista) :-
         '_',
         Artista
     ).
+
+
+% ------------------------------------------------------------
+% LECTURA DE DECADA
+% ------------------------------------------------------------
+
+leer_decada(Decada) :-
+    write('Ingresa la decada, por ejemplo 1980: '),
+
+    read_line_to_string(user_input, Texto),
+
+    number_string(Decada, Texto).
 
 
 % ------------------------------------------------------------
@@ -260,6 +304,129 @@ consultar_guitarristas :-
     ),
 
     mostrar_lista(Guitarristas).
+
+
+% ------------------------------------------------------------
+% ARTISTAS DE UNA DECADA
+% ------------------------------------------------------------
+
+consultar_artistas_decada :-
+    leer_decada(Decada),
+
+    findall(
+        Artista,
+        artista_decada(Artista, Decada),
+        Lista
+    ),
+
+    sort(
+        Lista,
+        Artistas
+    ),
+
+    (
+        Artistas = []
+    ->
+        writeln(
+            'No se encontraron artistas de esa decada.'
+        )
+    ;
+        format(
+            'Artistas formados en la decada de ~w:~n',
+            [Decada]
+        ),
+
+        mostrar_lista(Artistas)
+    ).
+
+
+% ------------------------------------------------------------
+% ALBUMES DE UNA DECADA
+% ------------------------------------------------------------
+
+consultar_albumes_decada :-
+    leer_decada(Decada),
+
+    findall(
+        Album,
+        album_decada(Album, Decada),
+        Lista
+    ),
+
+    sort(
+        Lista,
+        Albumes
+    ),
+
+    (
+        Albumes = []
+    ->
+        writeln(
+            'No se encontraron albumes de esa decada.'
+        )
+    ;
+        format(
+            'Albumes de la decada de ~w:~n',
+            [Decada]
+        ),
+
+        mostrar_lista(Albumes)
+    ).
+
+
+% ------------------------------------------------------------
+% RECOMENDAR ARTISTA
+% ------------------------------------------------------------
+
+consultar_recomendacion :-
+    leer_artista(Artista),
+
+    findall(
+        Recomendacion,
+        recomendar_por_genero(
+            Artista,
+            Recomendacion
+        ),
+        Lista
+    ),
+
+    sort(
+        Lista,
+        Recomendaciones
+    ),
+
+    (
+        Recomendaciones = []
+    ->
+        writeln(
+            'No se encontraron recomendaciones para ese artista.'
+        )
+    ;
+        format(
+            'Si te gusta ~w, podrias escuchar:~n',
+            [Artista]
+        ),
+
+        mostrar_lista(Recomendaciones)
+    ).
+
+
+% ------------------------------------------------------------
+% CONSULTAR VOCALISTAS
+% ------------------------------------------------------------
+
+consultar_vocalistas :-
+    findall(
+        Persona,
+        vocalista(Persona),
+        Vocalistas
+    ),
+
+    writeln(
+        'Vocalistas registrados:'
+    ),
+
+    mostrar_lista(Vocalistas).
 
 
 % ------------------------------------------------------------
