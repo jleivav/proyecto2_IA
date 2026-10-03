@@ -39,6 +39,7 @@ menu :-
     writeln('10. Recomendar por caracteristicas'),
     writeln('11. Albumes por decada y caracteristica'),
     writeln('12. Artistas por pais y genero'),
+    writeln('13. Recomendar artistas similares'),
     writeln('0. Salir'),
     nl,
     write('Opcion: '),
@@ -131,6 +132,12 @@ procesar_opcion("12") :-
     !,
     nl,
     consultar_artistas_pais_genero,
+    nl,
+    menu.
+procesar_opcion("13") :-
+    !,
+    nl,
+    consultar_similares,
     nl,
     menu.
 
@@ -457,36 +464,43 @@ consultar_albumes_decada :-
 consultar_recomendacion :-
     leer_artista(Artista),
 
-    findall(
-        Recomendacion,
-        recomendar_por_genero(
-            Artista,
-            Recomendacion
-        ),
-        Lista
-    ),
-
-    sort(
-        Lista,
-        Recomendaciones
-    ),
-
     (
-        Recomendaciones = []
+        \+ artista(Artista)
     ->
-        writeln(
-            'No se encontraron recomendaciones para ese artista.'
+        format(
+            'El artista "~w" no esta registrado.~n',
+            [Artista]
         )
     ;
-        format(
-            'Si te gusta ~w, podrias escuchar:~n',
-            [Artista]
+        findall(
+            Recomendacion,
+            recomendar_por_genero(
+                Artista,
+                Recomendacion
+            ),
+            Lista
         ),
 
-        mostrar_lista(Recomendaciones)
+        sort(
+            Lista,
+            Recomendaciones
+        ),
+
+        (
+            Recomendaciones = []
+        ->
+            writeln(
+                'No se encontraron recomendaciones para ese artista.'
+            )
+        ;
+            format(
+                'Si te gusta ~w, podrias escuchar:~n',
+                [Artista]
+            ),
+
+            mostrar_lista(Recomendaciones)
+        )
     ).
-
-
 % ------------------------------------------------------------
 % CONSULTAR VOCALISTAS
 % ------------------------------------------------------------
@@ -721,6 +735,52 @@ validar_pais_genero(Pais, Genero) :-
 
         mostrar_lista(Artistas)
     ).
+% ------------------------------------------------------------
+% CONSULTAR ARTISTAS SIMILARES
+% ------------------------------------------------------------
+
+consultar_similares :-
+    leer_artista(Artista),
+
+    (
+        \+ artista(Artista)
+    ->
+        format(
+            'El artista "~w" no esta registrado.~n',
+            [Artista]
+        )
+    ;
+        findall(
+            Recomendacion,
+            recomendar_similar(
+                Artista,
+                Recomendacion
+            ),
+            Lista
+        ),
+
+        sort(
+            Lista,
+            Recomendaciones
+        ),
+
+        (
+            Recomendaciones = []
+        ->
+            format(
+                'No se encontraron artistas similares a ~w.~n',
+                [Artista]
+            )
+        ;
+            format(
+                'Si te gusta ~w, tambien podrian interesarte:~n',
+                [Artista]
+            ),
+
+            mostrar_lista(es)
+        )
+    ).
+
 % ============================================================
 % FUNCIONES AUXILIARES PARA MOSTRAR RESULTADOS
 % ============================================================

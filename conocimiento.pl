@@ -836,8 +836,8 @@ caracteristica_artista(Artista, Caracteristica) :-
 % ------------------------------------------------------------
 % RECOMENDACION POR DOS CARACTERISTICAS
 %
-% El artista tiene al menos un mismo álbum registrado 
-% que cumple ambas características.
+% El artista tiene al menos un mismo album registrado
+% que cumple ambas caracteristicas.
 % ------------------------------------------------------------
 
 recomendar_por_caracteristicas(
@@ -848,15 +848,45 @@ recomendar_por_caracteristicas(
     album(Artista, Album, _),
     caracteristica_album(Album, Caracteristica1),
     caracteristica_album(Album, Caracteristica2).
-    
+
+
 % ------------------------------------------------------------
-% CARACTERISTICA VALIDA
-% Una caracteristica es valida si aparece registrada
-% en al menos un album.
+% RECOMENDACION POR SIMILITUD
+%
+% Dos artistas son similares si poseen al menos un album
+% registrado cada uno que comparte tres caracteristicas.
 % ------------------------------------------------------------
 
-caracteristica_valida(Caracteristica) :-
-    caracteristica_album(_, Caracteristica).
+recomendar_similar(Artista, Recomendacion) :-
+    album(Artista, Album1, _),
+    album(Recomendacion, Album2, _),
+
+    Artista \= Recomendacion,
+
+    caracteristica_album(Album1, Caracteristica1),
+    caracteristica_album(Album1, Caracteristica2),
+    caracteristica_album(Album1, Caracteristica3),
+
+    Caracteristica1 \= Caracteristica2,
+    Caracteristica1 \= Caracteristica3,
+    Caracteristica2 \= Caracteristica3,
+
+    caracteristica_album(
+        Album2,
+        Caracteristica1
+    ),
+
+    caracteristica_album(
+        Album2,
+        Caracteristica2
+    ),
+
+    caracteristica_album(
+        Album2,
+        Caracteristica3
+    ).
+
+
 % ------------------------------------------------------------
 % VALIDACIONES
 % ------------------------------------------------------------
