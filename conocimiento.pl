@@ -812,6 +812,14 @@ recomendar_por_genero(Artista, Recomendacion) :-
     genero(Recomendacion, Genero),
     Artista \= Recomendacion.
 
+% ------------------------------------------------------------
+% ARTISTAS POR PAIS Y GENERO
+% ------------------------------------------------------------
+
+artista_pais_genero(Artista, Pais, Genero) :-
+    pais(Artista, Pais),
+    genero(Artista, Genero).
+
 
 % ------------------------------------------------------------
 % CARACTERISTICA DE ARTISTA
@@ -849,3 +857,15 @@ recomendar_por_caracteristicas(
 
 caracteristica_valida(Caracteristica) :-
     caracteristica_album(_, Caracteristica).
+% ------------------------------------------------------------
+% VALIDACIONES
+% ------------------------------------------------------------
+
+caracteristica_valida(Caracteristica) :-
+    caracteristica_album(_, Caracteristica).
+
+genero_valido(Genero) :-
+    genero(_, Genero).
+
+pais_valido(Pais) :-
+    pais(_, Pais).

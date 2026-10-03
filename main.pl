@@ -38,6 +38,7 @@ menu :-
     writeln('9. Mostrar vocalistas'),
     writeln('10. Recomendar por caracteristicas'),
     writeln('11. Albumes por decada y caracteristica'),
+    writeln('12. Artistas por pais y genero'),
     writeln('0. Salir'),
     nl,
     write('Opcion: '),
@@ -126,6 +127,12 @@ procesar_opcion("11") :-
     consultar_albumes_decada_caracteristica,
     nl,
     menu.
+procesar_opcion("12") :-
+    !,
+    nl,
+    consultar_artistas_pais_genero,
+    nl,
+    menu.
 
 procesar_opcion("0") :-
     !,
@@ -201,7 +208,30 @@ leer_caracteristica(Mensaje, Caracteristica) :-
         '_',
         Caracteristica
     ).
+% ------------------------------------------------------------
+% LEER TEXTO NORMALIZADO
+% Convierte espacios a guion bajo y pasa a minusculas.
+% ------------------------------------------------------------
 
+leer_texto_normalizado(Mensaje, Valor) :-
+    write(Mensaje),
+
+    read_line_to_string(user_input, Texto),
+
+    string_lower(Texto, Minuscula),
+
+    split_string(
+        Minuscula,
+        " ",
+        " ",
+        Partes
+    ),
+
+    atomic_list_concat(
+        Partes,
+        '_',
+        Valor
+    ).
 
 % ------------------------------------------------------------
 % CONSULTAR GENERO
@@ -621,8 +651,76 @@ consultar_albumes_decada_caracteristica :-
             mostrar_albumes_artista(Resultados)
         )
     ).
+% ------------------------------------------------------------
+% CONSULTAR ARTISTAS POR PAIS Y GENERO
+% ------------------------------------------------------------
 
+consultar_artistas_pais_genero :-
+    leer_texto_normalizado(
+        'Ingresa el pais: ',
+        Pais
+    ),
 
+    leer_texto_normalizado(
+        'Ingresa el genero: ',
+        Genero
+    ),
+
+    validar_pais_genero(
+        Pais,
+        Genero
+    ).
+% ------------------------------------------------------------
+% VALIDAR PAIS Y GENERO
+% ------------------------------------------------------------
+
+validar_pais_genero(Pais, _) :-
+    \+ pais_valido(Pais),
+    !,
+    format(
+        'El pais "~w" no esta registrado.~n',
+        [Pais]
+    ).
+
+validar_pais_genero(_, Genero) :-
+    \+ genero_valido(Genero),
+    !,
+    format(
+        'El genero "~w" no esta registrado.~n',
+        [Genero]
+    ).
+
+validar_pais_genero(Pais, Genero) :-
+    findall(
+        Artista,
+        artista_pais_genero(
+            Artista,
+            Pais,
+            Genero
+        ),
+        Lista
+    ),
+
+    sort(
+        Lista,
+        Artistas
+    ),
+
+    (
+        Artistas = []
+    ->
+        format(
+            'No se encontraron artistas de ~w del genero ~w.~n',
+            [Pais, Genero]
+        )
+    ;
+        format(
+            'Artistas de ~w del genero ~w:~n',
+            [Pais, Genero]
+        ),
+
+        mostrar_lista(Artistas)
+    ).
 % ============================================================
 % FUNCIONES AUXILIARES PARA MOSTRAR RESULTADOS
 % ============================================================
