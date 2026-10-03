@@ -815,8 +815,8 @@ caracteristica_artista(Artista, Caracteristica) :-
 % ------------------------------------------------------------
 % RECOMENDACION POR DOS CARACTERISTICAS
 %
-% Encuentra artistas que tengan material registrado que cumpla
-% con ambas caracteristicas solicitadas.
+% El artista tiene al menos un mismo álbum registrado 
+% que cumple ambas características.
 % ------------------------------------------------------------
 
 recomendar_por_caracteristicas(
@@ -824,8 +824,9 @@ recomendar_por_caracteristicas(
     Caracteristica2,
     Artista
 ) :-
-    caracteristica_artista(Artista, Caracteristica1),
-    caracteristica_artista(Artista, Caracteristica2).
+    album(Artista, Album, _),
+    caracteristica_album(Album, Caracteristica1),
+    caracteristica_album(Album, Caracteristica2).
     
 % ------------------------------------------------------------
 % CARACTERISTICA VALIDA
