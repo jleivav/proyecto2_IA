@@ -37,6 +37,7 @@ menu :-
     writeln('8. Recomendar artista por genero'),
     writeln('9. Mostrar vocalistas'),
     writeln('10. Recomendar por caracteristicas'),
+    writeln('11. Albumes por decada y caracteristica'),
     writeln('0. Salir'),
     nl,
     write('Opcion: '),
@@ -117,6 +118,12 @@ procesar_opcion("10") :-
     !,
     nl,
     consultar_por_caracteristicas,
+    nl,
+    menu.
+procesar_opcion("11") :-
+    !,
+    nl,
+    consultar_albumes_decada_caracteristica,
     nl,
     menu.
 
@@ -562,6 +569,58 @@ validar_y_recomendar(Caracteristica1, Caracteristica2) :-
 
         mostrar_lista(Recomendaciones)
     ).
+% ------------------------------------------------------------
+% CONSULTAR ALBUMES POR DECADA Y CARACTERISTICA
+% ------------------------------------------------------------
+
+consultar_albumes_decada_caracteristica :-
+    leer_decada(Decada),
+
+    leer_caracteristica(
+        'Ingresa una caracteristica: ',
+        Caracteristica
+    ),
+
+    (
+        \+ caracteristica_valida(Caracteristica)
+    ->
+        format(
+            'La caracteristica "~w" no esta registrada.~n',
+            [Caracteristica]
+        )
+    ;
+        findall(
+            Album-Artista,
+            album_decada_caracteristica(
+                Album,
+                Artista,
+                Decada,
+                Caracteristica
+            ),
+            Lista
+        ),
+
+        sort(
+            Lista,
+            Resultados
+        ),
+
+        (
+            Resultados = []
+        ->
+            format(
+                'No se encontraron albumes de la decada de ~w con caracteristica ~w.~n',
+                [Decada, Caracteristica]
+            )
+        ;
+            format(
+                'Albumes de la decada de ~w con caracteristica ~w:~n',
+                [Decada, Caracteristica]
+            ),
+
+            mostrar_albumes_artista(Resultados)
+        )
+    ).
 
 
 % ============================================================
@@ -612,3 +671,16 @@ mostrar_personas_banda([Persona-Artista | Resto]) :-
     ),
 
     mostrar_personas_banda(Resto).
+% ------------------------------------------------------------
+% MOSTRAR ALBUM Y ARTISTA
+% ------------------------------------------------------------
+
+mostrar_albumes_artista([]).
+
+mostrar_albumes_artista([Album-Artista | Resto]) :-
+    format(
+        '- ~w (~w)~n',
+        [Album, Artista]
+    ),
+
+    mostrar_albumes_artista(Resto).

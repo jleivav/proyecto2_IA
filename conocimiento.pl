@@ -787,6 +787,19 @@ artista_decada(Artista, Decada) :-
 album_decada(Album, Decada) :-
     album(_, Album, Anio),
     Decada is (Anio // 10) * 10.
+% ------------------------------------------------------------
+% ALBUM POR DECADA Y CARACTERISTICA
+% ------------------------------------------------------------
+
+album_decada_caracteristica(
+    Album,
+    Artista,
+    Decada,
+    Caracteristica
+) :-
+    album(Artista, Album, Anio),
+    Decada is (Anio // 10) * 10,
+    caracteristica_album(Album, Caracteristica).
 
 
 % ------------------------------------------------------------
