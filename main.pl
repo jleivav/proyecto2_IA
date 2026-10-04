@@ -122,18 +122,21 @@ procesar_opcion("10") :-
     consultar_por_caracteristicas,
     nl,
     menu.
+
 procesar_opcion("11") :-
     !,
     nl,
     consultar_albumes_decada_caracteristica,
     nl,
     menu.
+
 procesar_opcion("12") :-
     !,
     nl,
     consultar_artistas_pais_genero,
     nl,
     menu.
+
 procesar_opcion("13") :-
     !,
     nl,
@@ -215,6 +218,8 @@ leer_caracteristica(Mensaje, Caracteristica) :-
         '_',
         Caracteristica
     ).
+
+
 % ------------------------------------------------------------
 % LEER TEXTO NORMALIZADO
 % Convierte espacios a guion bajo y pasa a minusculas.
@@ -239,6 +244,7 @@ leer_texto_normalizado(Mensaje, Valor) :-
         '_',
         Valor
     ).
+
 
 % ------------------------------------------------------------
 % CONSULTAR GENERO
@@ -501,6 +507,8 @@ consultar_recomendacion :-
             mostrar_lista(Recomendaciones)
         )
     ).
+
+
 % ------------------------------------------------------------
 % CONSULTAR VOCALISTAS
 % ------------------------------------------------------------
@@ -613,6 +621,8 @@ validar_y_recomendar(Caracteristica1, Caracteristica2) :-
 
         mostrar_lista(Recomendaciones)
     ).
+
+
 % ------------------------------------------------------------
 % CONSULTAR ALBUMES POR DECADA Y CARACTERISTICA
 % ------------------------------------------------------------
@@ -665,6 +675,8 @@ consultar_albumes_decada_caracteristica :-
             mostrar_albumes_artista(Resultados)
         )
     ).
+
+
 % ------------------------------------------------------------
 % CONSULTAR ARTISTAS POR PAIS Y GENERO
 % ------------------------------------------------------------
@@ -684,6 +696,8 @@ consultar_artistas_pais_genero :-
         Pais,
         Genero
     ).
+
+
 % ------------------------------------------------------------
 % VALIDAR PAIS Y GENERO
 % ------------------------------------------------------------
@@ -735,6 +749,8 @@ validar_pais_genero(Pais, Genero) :-
 
         mostrar_lista(Artistas)
     ).
+
+
 % ------------------------------------------------------------
 % CONSULTAR ARTISTAS SIMILARES
 % ------------------------------------------------------------
@@ -777,9 +793,10 @@ consultar_similares :-
                 [Artista]
             ),
 
-            mostrar_lista(es)
+            mostrar_lista(Recomendaciones)
         )
     ).
+
 
 % ============================================================
 % FUNCIONES AUXILIARES PARA MOSTRAR RESULTADOS
@@ -829,6 +846,8 @@ mostrar_personas_banda([Persona-Artista | Resto]) :-
     ),
 
     mostrar_personas_banda(Resto).
+
+
 % ------------------------------------------------------------
 % MOSTRAR ALBUM Y ARTISTA
 % ------------------------------------------------------------
