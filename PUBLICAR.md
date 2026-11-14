@@ -2,9 +2,19 @@
 
 ## Estado
 
-El proyecto está preparado para Render, pero todavía no hay un servicio publicado.
-Se necesita una cuenta del dueño del proyecto para crearlo y configurar el secreto.
+Servicio creado en Render, dentro del espacio «My Workspace», con plan Free.
+URL asignada: https://entre-acordes-ia.onrender.com
+Panel: https://dashboard.render.com/web/srv-dbscscon74is739grjl0
+
+La primera construcción completó el arranque, pero la consulta detectó que SQLite
+tenía permisos de lectura restringidos al usuario de construcción. Se corrigió
+el Dockerfile y se añadió una consulta Prolog al construir como usuario del servicio.
+La conexión LLM requiere configurar GEMINI_API_KEY directamente en el panel.
 No hace falta instalar Docker en el computador de la profesora.
+
+Verificación del despliegue corregido: estado `live`, página HTTP 200,
+`/api/estado` indica Prolog disponible y una consulta POST por HTTPS devolvió
+«Metallica: Estados Unidos». Gemini aún no está configurado en el alojamiento.
 
 ## Configuración preparada
 
@@ -21,7 +31,7 @@ el catálogo, editarlo y desplegar de nuevo. La aplicación no almacena conversa
 ## Pasos que requieren tu cuenta
 
 1. Crear cuenta en https://dashboard.render.com/register (puedes entrar con GitHub).
-2. Conectar Render a esta conversación para que el agente continúe el despliegue.
+2. Conectar Render a esta conversación para que el agente continúe el despliegue (completado).
 3. Autorizar el acceso al repositorio `jleivav/proyecto2_IA` si Render lo solicita.
 4. Configurar `GEMINI_API_KEY` como variable secreta en Render cuando se cree el servicio.
    Pegarla directamente en el panel, no en el chat ni en GitHub.
@@ -52,8 +62,8 @@ La clave permanece en el servidor y las consultas consumen la cuota de esa clave
 
 Pasaron cuatro pruebas de la entrada WSGI: petición desde HTTPS, consulta real de
 país en SQLite, rechazo de un origen distinto y bloqueo de rutas de archivos privados.
-No hay Docker instalado en el entorno de trabajo, por lo que la construcción Linux
-y Gunicorn aún deben verificarse durante el primer despliegue en Render.
+La construcción Linux y Gunicorn se ejecutan en Render; no hay Docker instalado
+en el entorno de trabajo. El estado actual de cada despliegue se revisa en el panel.
 
 ## Referencias
 

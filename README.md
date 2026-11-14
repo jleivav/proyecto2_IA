@@ -28,8 +28,8 @@ ni permite abrir el PC desde el teléfono. No es necesario publicar el proyecto
 para probarlo desde el repositorio.
 
 Para alojarlo y compartir un enlace sin instalar nada en el computador de la
-profesora, ver [PUBLICAR.md](PUBLICAR.md). La configuración de Render ya está
-preparada; falta conectar la cuenta y completar el despliegue.
+profesora, ver [PUBLICAR.md](PUBLICAR.md). El servicio Render está creado en
+https://entre-acordes-ia.onrender.com; la clave de Gemini se configura en su panel.
 
 ## Tres modos, claramente diferenciados
 
@@ -150,4 +150,5 @@ conviene modificar o agregar información de un artista existente y su fuente.
 - Verificación realizada: 20 pruebas del dataset, 6 del chatbot (con subcasos para
   las 20 preguntas y equivalencia de motores) y 5 pruebas HTTP (una con Gemini real), todas correctas.
   No se pudo revisar visualmente la página porque no había navegador conectado.
-- No se ha publicado ni enviado el código a ningún servicio remoto.
+- Código guardado en GitHub y aplicación publicada en Render. Datos y Prolog
+  comprobados por HTTPS; falta configurar la clave en Render para verificar Gemini allí.
