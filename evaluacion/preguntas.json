@@ -1,0 +1,22 @@
+[
+  {"pregunta":"¿De qué país es Metallica?","plan":{"operacion":"pais","artista":"metallica"}},
+  {"pregunta":"¿Cuándo se formó Iron Maiden?","plan":{"operacion":"formacion","artista":"iron_maiden"}},
+  {"pregunta":"¿Qué géneros toca Opeth?","plan":{"operacion":"generos","artista":"opeth"}},
+  {"pregunta":"¿Qué álbumes de Metallica tienes registrados?","plan":{"operacion":"albumes","artista":"metallica"}},
+  {"pregunta":"¿Qué canciones de Los Bunkers tienes?","plan":{"operacion":"canciones","artista":"los_bunkers"}},
+  {"pregunta":"¿En qué álbum aparece “Wind of Change”?","plan":{"operacion":"canciones","titulo":"Wind of Change"}},
+  {"pregunta":"¿De qué año es “Nothing Else Matters”?","plan":{"operacion":"canciones","titulo":"Nothing Else Matters"}},
+  {"pregunta":"¿En qué idioma está “Carolus Rex”?","plan":{"operacion":"canciones","titulo":"Carolus Rex"}},
+  {"pregunta":"¿Qué integrantes de Metallica tienes registrados?","plan":{"operacion":"integrantes","artista":"metallica"}},
+  {"pregunta":"¿Qué bandas chilenas tienes?","plan":{"operacion":"artistas","pais":"chile"}},
+  {"pregunta":"¿Qué bandas tocan thrash metal?","plan":{"operacion":"artistas","genero":"thrash_metal"}},
+  {"pregunta":"¿Qué bandas suecas tienes?","plan":{"operacion":"artistas","pais":"suecia"}},
+  {"pregunta":"¿Qué bandas se formaron en los años ochenta?","plan":{"operacion":"artistas","decada":1980}},
+  {"pregunta":"¿Qué álbumes de los años noventa tienes?","plan":{"operacion":"albumes","decada":1990}},
+  {"pregunta":"¿Qué baladas tienes registradas?","plan":{"operacion":"canciones","etiqueta":"balada"}},
+  {"pregunta":"¿Qué canciones instrumentales tienes?","plan":{"operacion":"canciones","etiqueta":"instrumental"}},
+  {"pregunta":"¿Qué bandas chilenas tocan rock progresivo?","plan":{"operacion":"artistas","pais":"chile","genero":"rock_progresivo"}},
+  {"pregunta":"¿Qué artistas son similares a Metallica?","plan":{"operacion":"similares","artista":"metallica"}},
+  {"pregunta":"¿Por qué recomiendas artistas similares a Opeth?","plan":{"operacion":"similares","artista":"opeth"}},
+  {"pregunta":"¿Qué fuentes tienes sobre Metallica?","plan":{"operacion":"fuentes","artista":"metallica"}}
+]

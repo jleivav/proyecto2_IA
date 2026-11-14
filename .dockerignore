@@ -1,0 +1,12 @@
+.git
+.env*
+**/.env*
+.codex-attachments
+.agents
+.codex
+.aws
+**/__pycache__
+**/*.pyc
+.venv
+evaluacion
+entrega2_python
