@@ -2,7 +2,6 @@
 
 Revisión inicial: 28 de octubre de 2026. Última ampliación: **14 de noviembre de
 2026**. Esta es documentación del dataset, no el informe académico ni un chatbot.
-No se realizaron commits, push ni despliegues.
 
 ## Resultado y alcance
 

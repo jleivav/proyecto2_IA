@@ -31,16 +31,6 @@ def main():
     fecha = datetime.now(timezone.utc).isoformat()
     ruta.write_text(json.dumps({'fecha_utc': fecha, 'modelo_llm': os.environ.get('GEMINI_MODEL') if args.llm else None,
                                'resultados': resultados}, ensure_ascii=False, indent=2), encoding='utf-8')
-    if not args.llm:
-        lineas = ['# Respuestas locales registradas', '', 'Fecha UTC: ' + fecha, '',
-                  'Ejecuciones reales de Prolog. El modo Datos recupera los mismos registros.',
-                  'Estos resultados no contienen ejecuciones de Gemini ni reemplazan la comparación final.', '']
-        for registro in resultados:
-            salida = registro['ejecuciones']['prolog']
-            lineas += [f"## {registro['numero']}. {registro['pregunta']}", '',
-                       salida.get('respuesta', 'Error: ' + salida.get('error', 'desconocido')), '',
-                       f"Tiempo: {salida.get('segundos', 'no disponible')} s.", '']
-        (RAIZ / 'evaluacion/RESPUESTAS_LOCALES.md').write_text('\n'.join(lineas), encoding='utf-8')
     print(f'Resultados guardados: {ruta}')
     print('La corrección de la redacción y las conclusiones requieren revisión humana.')
 

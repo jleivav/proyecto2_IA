@@ -40,13 +40,7 @@ No necesita internet ni realiza operaciones de Git. Termina con error si falla
 una comprobación. En este cierre pasaron las 20 pruebas, sin omisiones.
 Las bases de versiones anteriores se rechazan con instrucciones para reconstruir.
 
-Si `python` abre Microsoft Store, usar `py -3` o una instalación real de Python.
-En este equipo se usó Python 3.12.14:
-
-```powershell
-$pythonMusical = 'C:\Users\EQUIPO 1591\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe'
-& $pythonMusical -m entrega2.verificar
-```
+Si Windows no reconoce `python`, se puede usar `py -3` en los mismos comandos.
 
 Pasos individuales:
 
