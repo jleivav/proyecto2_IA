@@ -49,34 +49,32 @@ class BaseMusical:
             raise ValueError(f'Artista inexistente o ambiguo: {nombre}')
         return filas[0]
 
-    def albumes(self, artista=None, titulo=None):
-        sql, params = 'SELECT * FROM albumes WHERE 1=1', []
+    def _publicaciones(self, tabla, artista, titulo, etiquetas=()):
+        """Filtros comunes de álbumes y canciones; la tabla la eligen estos métodos."""
+        sql, params = f'SELECT * FROM {tabla} WHERE 1=1', []
         if artista is not None:
             sql += ' AND artista_id=?'
             params.append(self._artista(artista)['id'])
         if titulo is not None:
             sql += ' AND instr(normalizar(titulo),?)>0'
             params.append(normalizar(titulo))
-        return self._filas(sql + ' ORDER BY anio, titulo', params)
-
-    def canciones(self, artista=None, titulo=None, baladas=False, caracteristica=None):
-        sql, params = 'SELECT * FROM canciones WHERE 1=1', []
-        if artista is not None:
-            sql += ' AND artista_id=?'
-            params.append(self._artista(artista)['id'])
-        if titulo is not None:
-            sql += ' AND instr(normalizar(titulo),?)>0'
-            params.append(normalizar(titulo))
-        etiquetas = list(dict.fromkeys(([caracteristica] if caracteristica is not None else []) +
-                                       (['balada'] if baladas else [])))
-        for etiqueta in etiquetas:
+        for etiqueta in dict.fromkeys(etiquetas):
             sql += ''' AND EXISTS (SELECT 1 FROM json_each(canciones.caracteristicas) e
                        WHERE normalizar(e.value)=?)'''
             params.append(normalizar(etiqueta))
-        filas = self._filas(sql + ' ORDER BY titulo', params)
-        for fila in filas:
-            fila['caracteristicas'] = json.loads(fila['caracteristicas'])
+        orden = 'anio, titulo' if tabla == 'albumes' else 'titulo'
+        filas = self._filas(sql + ' ORDER BY ' + orden, params)
+        if tabla == 'canciones':
+            for fila in filas:
+                fila['caracteristicas'] = json.loads(fila['caracteristicas'])
         return filas
+
+    def albumes(self, artista=None, titulo=None):
+        return self._publicaciones('albumes', artista, titulo)
+
+    def canciones(self, artista=None, titulo=None, baladas=False, caracteristica=None):
+        etiquetas = ([caracteristica] if caracteristica is not None else []) + (['balada'] if baladas else [])
+        return self._publicaciones('canciones', artista, titulo, etiquetas)
 
     def fuentes(self, entidad, identificador):
         return self._filas('SELECT * FROM fuentes WHERE entidad=? AND identificador=? ORDER BY URL, campo',

@@ -6,6 +6,18 @@ import tempfile
 
 from .construir import BASE, CATALOGO, TABLAS, construir
 
+# Cada predicado de entrega 1 indica su tabla y las columnas que conserva.
+COMPATIBLES = {
+    'artista': ('artistas', ('id',)),
+    'genero': ('artista_generos', ('artista_id', 'genero_id')),
+    'pais': ('artistas', ('id', 'pais')),
+    'formado_en': ('artistas', ('id', 'anio_formacion')),
+    'album': ('albumes', ('artista_id', 'id', 'anio')),
+    'integrante': ('integrantes', ('persona_id', 'artista_id')),
+    'instrumento': ('integrantes', ('persona_id', 'instrumento_o_rol')),
+    'caracteristica_album': ('caracteristicas_album', ('album_id', 'caracteristica')),
+}
+
 
 def termino(valor):
     if valor is None:
@@ -25,8 +37,7 @@ def exportar(catalogo=CATALOGO, salida=BASE / 'conocimiento_generado.pl'):
         construir(catalogo, Path(temporal) / 'validacion.sqlite')
     datos = json.loads(Path(catalogo).read_text(encoding='utf-8-sig'))
     hechos = {f'e2_{tabla}/{len(campos)}': [] for tabla, campos in TABLAS.items()}
-    heredados = {'artista/1': [], 'genero/2': [], 'pais/2': [], 'formado_en/2': [],
-                 'album/3': [], 'integrante/2': [], 'instrumento/2': [], 'caracteristica_album/2': []}
+    heredados = {f'{predicado}/{len(campos)}': [] for predicado, (_, campos) in COMPATIBLES.items()}
 
     def agregar(diccionario, predicado, *valores):
         diccionario[predicado + '/' + str(len(valores))].append(
@@ -35,22 +46,11 @@ def exportar(catalogo=CATALOGO, salida=BASE / 'conocimiento_generado.pl'):
     for tabla, campos in TABLAS.items():
         for fila in datos[tabla]:
             agregar(hechos, 'e2_' + tabla, *(fila.get(c) for c in campos))
-    for a in datos['artistas']:
-        agregar(heredados, 'artista', a['id'])
-        if a['pais'] is not None:
-            agregar(heredados, 'pais', a['id'], a['pais'])
-        if a.get('anio_formacion') is not None:
-            agregar(heredados, 'formado_en', a['id'], a['anio_formacion'])
-    for g in datos['artista_generos']:
-        agregar(heredados, 'genero', g['artista_id'], g['genero_id'])
-    for a in datos['albumes']:
-        if a['anio'] is not None:
-            agregar(heredados, 'album', a['artista_id'], a['id'], a['anio'])
-    for i in datos['integrantes']:
-        agregar(heredados, 'integrante', i['persona_id'], i['artista_id'])
-        agregar(heredados, 'instrumento', i['persona_id'], i['instrumento_o_rol'])
-    for c in datos['caracteristicas_album']:
-        agregar(heredados, 'caracteristica_album', c['album_id'], c['caracteristica'])
+    for predicado, (tabla, campos) in COMPATIBLES.items():
+        for fila in datos[tabla]:
+            valores = [fila.get(c) for c in campos]
+            if None not in valores:
+                agregar(heredados, predicado, *valores)
     todos = {**hechos, **heredados}
     exports = list(todos) + ['balada/2', 'similitud/4']
     lineas = ['% Generado desde catalogo.json. No editar.', ':- encoding(utf8).',

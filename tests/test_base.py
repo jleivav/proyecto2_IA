@@ -11,9 +11,9 @@ import subprocess
 import tempfile
 import unittest
 
-from .construir import BASE, CATALOGO, construir, validar
-from .consultar import BaseMusical
-from .exportar_prolog import exportar, termino
+from entrega2.construir import BASE, CATALOGO, construir, validar
+from entrega2.consultar import BaseMusical
+from entrega2.exportar_prolog import exportar, termino
 
 # Lista independiente: detecta sustituciones accidentales además del conteo.
 CONFIRMADOS = '''Metallica|Megadeth|Slayer|Sepultura|Iron Maiden|Judas Priest|Black Sabbath|Motörhead|Ozzy Osbourne|Dio|Dream Theater|Opeth|Tool|Mastodon|Animals as Leaders|Suicide Silence|Chelsea Grin|Slaughter to Prevail|Lorna Shore|Whitechapel|Oceano|Brand of Sacrifice|Bring Me the Horizon|Killswitch Engage|Bullet for My Valentine|Trivium|As I Lay Dying|Mägo de Oz|Helloween|Stratovarius|Rhapsody of Fire|DragonForce|Blind Guardian|Sonata Arctica|Nightwish|Sabaton|Korn|Slipknot|System of a Down|Linkin Park|Pink Floyd|Porcupine Tree|King Crimson|Rush|Camel|Jethro Tull|Kansas|Genesis|Led Zeppelin|AC/DC|Aerosmith|Queen|Deep Purple|Scorpions|Whitesnake|Bon Jovi|Guns N' Roses|Journey|Eddie Money|Foreigner|Boston|Toto|Nirvana|Pearl Jam|Alice in Chains|Stone Temple Pilots|Soundgarden|Temple of the Dog|Radiohead|Foo Fighters|Red Hot Chili Peppers|Muse|Incubus|The Smashing Pumpkins|Audioslave|Placebo|The Killers|Green Day|Paramore|blink-182|The Offspring|Los Tres|Los Prisioneros|Los Bunkers|Los Jaivas|Lucybell|La Ley|Chancho en Piedra|Sinergia|La Renga|Rata Blanca|Los Fabulosos Cadillacs|Soda Stereo'''.split('|')
@@ -278,7 +278,7 @@ class BaseTests(unittest.TestCase):
         self.assertEqual(self.ruta.read_bytes(), antes)
 
     def test_detecta_base_desactualizada_aunque_conserve_conteos(self):
-        from .verificar import comprobar_sqlite
+        from entrega2.verificar import comprobar_sqlite
         otra = Path(self.tmp.name) / 'desactualizada.sqlite'
         construir(destino=otra)
         comprobar_sqlite(self.datos, otra)

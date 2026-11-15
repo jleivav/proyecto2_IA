@@ -33,7 +33,9 @@ python -m entrega2.verificar
 ```
 
 Reconstruye SQLite y Prolog, compara **cada fila** SQLite con el JSON, ejecuta
-**20 pruebas** y genera `ESTADO_BASE.md` y `AUDITORIA_CANCIONES.md`.
+**20 pruebas** y muestra los conteos de cada tabla en la terminal.
+`ESTADO_BASE.md` y `AUDITORIA_CANCIONES.md` conservan la revisión del catálogo
+del 14 de noviembre; ya no se regeneran al ejecutar las pruebas.
 No necesita internet ni realiza operaciones de Git. Termina con error si falla
 una comprobación. En este cierre pasaron las 20 pruebas, sin omisiones.
 Las bases de versiones anteriores se rechazan con instrucciones para reconstruir.
@@ -50,7 +52,7 @@ Pasos individuales:
 
 ```powershell
 python -m entrega2.construir
-python -m unittest entrega2.test_base -v
+python -m unittest tests.test_base -v
 python -m entrega2.exportar_prolog
 ```
 
@@ -120,16 +122,17 @@ si todas las otras canciones la poseen o no.
 | `schema.sql` | Tablas, claves y restricciones |
 | `construir.py` | Validación y construcción atómica de SQLite |
 | `consultar.py` | API Python y consultas desde terminal |
-| `test_base.py` | Integridad, cobertura, consultas y preservación de entrega 1 |
-| `verificar.py` | Reconstrucción, pruebas y reportes en un comando |
-| `ESTADO_BASE.md` | Conteos y límites actuales, generado |
-| `AUDITORIA_CANCIONES.md` | Idioma, balada, rasgos y fuentes por canción, generado |
+| `../tests/test_base.py` | Integridad, cobertura, consultas y preservación de entrega 1 |
+| `verificar.py` | Reconstrucción, comparación de filas y pruebas en un comando |
+| `ESTADO_BASE.md` | Conteos y límites documentados en la revisión del 14 de noviembre |
+| `AUDITORIA_CANCIONES.md` | Revisión de idiomas, etiquetas y fuentes del 14 de noviembre |
 | `INFORME_DATOS.md` | Fuentes, decisiones y datos desconocidos |
 | `exportar_prolog.py` | Exportación opcional solicitada originalmente |
 | `conocimiento_generado.pl` | Artefacto opcional; Python no lo necesita |
 
 Editar JSON y ejecutar `python -m entrega2.verificar`. No editar directamente
-SQLite, hechos Prolog ni reportes generados. Un catálogo inválido no reemplaza
+SQLite ni hechos Prolog. Para cambios posteriores, consultar el catálogo como
+fuente actual; los documentos de auditoría son una instantánea. Un catálogo inválido no reemplaza
 la base anterior. Los IDs permanecen estables aunque cambie la grafía de un título.
 
 ## Qué se completó el 14 de noviembre de 2026

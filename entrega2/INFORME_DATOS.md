@@ -92,8 +92,8 @@ no cambia ni depende de este predicado.
 ## Fuentes utilizadas
 
 El detalle por campo está en `catalogo.json`: entidad, identificador, URL, nombre,
-nota, campos respaldados, estado y fecha. `ESTADO_BASE.md` genera el conteo de
-fuentes y URL directamente desde JSON. Una URL repetida no constituye varias
+nota, campos respaldados, estado y fecha. `ESTADO_BASE.md` conserva el conteo de
+fuentes y URL de la revisión del 14 de noviembre. Una URL repetida no constituye varias
 corroboraciones independientes.
 
 Fuentes primarias y documentación especializada:

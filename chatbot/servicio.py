@@ -112,22 +112,20 @@ def interpretar_simple(pregunta):
 
 def resolver_artista(plan):
     plan = dict(validar_plan(plan))
-    if plan.get('artista'):
-        with BaseMusical() as base:
+    with BaseMusical() as base:
+        if plan.get('artista'):
             plan['artista'] = base._artista(plan['artista'])['id']
-    if plan.get('genero'):
-        with BaseMusical() as base:
+        if plan.get('genero'):
             encontrados = base._filas('SELECT id FROM generos WHERE normalizar(id)=? OR normalizar(nombre)=?',
                                      (normalizar(plan['genero']),) * 2)
-        if not encontrados:
-            raise ValueError('Ese género no está registrado con ese nombre.')
-        plan['genero'] = encontrados[0]['id']
-    if plan.get('pais'):
-        with BaseMusical() as base:
+            if not encontrados:
+                raise ValueError('Ese género no está registrado con ese nombre.')
+            plan['genero'] = encontrados[0]['id']
+        if plan.get('pais'):
             paises = base._filas('SELECT DISTINCT pais FROM artistas WHERE normalizar(pais)=?', (normalizar(plan['pais']),))
-        if not paises:
-            raise ValueError('Ese país no está registrado con ese nombre.')
-        plan['pais'] = paises[0]['pais']
+            if not paises:
+                raise ValueError('Ese país no está registrado con ese nombre.')
+            plan['pais'] = paises[0]['pais']
     return plan
 
 

@@ -1,6 +1,8 @@
 # Estado generado de la base musical
 
-Generado por `python -m entrega2.verificar` desde el catálogo actual.
+Instantánea de la revisión del 14 de noviembre de 2026. El verificador actual
+reconstruye las bases, ejecuta las pruebas y muestra conteos en la terminal;
+este documento no se regenera automáticamente.
 
 Construcción SQLite, exportación Prolog, comparación de todas las filas
 SQLite/JSON y suite de pruebas: **correctas**.

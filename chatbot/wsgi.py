@@ -2,12 +2,13 @@
 import json
 import os
 from http import HTTPStatus
+from pathlib import Path
 from urllib.parse import urlsplit
 
-from .servidor import WEB
 from .servicio import cargar_config, responder, ruta_swipl
 
 cargar_config()
+WEB = Path(__file__).parent / 'web'
 ARCHIVOS = {'/': ('index.html', 'text/html'), '/app.js': ('app.js', 'text/javascript'),
             '/estilo.css': ('estilo.css', 'text/css')}
 

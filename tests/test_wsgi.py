@@ -4,7 +4,7 @@ import json
 import unittest
 from unittest.mock import patch
 
-from .wsgi import application
+from chatbot.wsgi import application
 
 
 def pedir(ruta='/', metodo='GET', cuerpo=None, origen=None):

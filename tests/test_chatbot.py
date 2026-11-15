@@ -3,7 +3,7 @@ import json
 import unittest
 from unittest.mock import patch
 
-from .servicio import (RAIZ, consultar_prolog, consultar_sqlite, interpretar_simple,
+from chatbot.servicio import (RAIZ, consultar_prolog, consultar_sqlite, interpretar_simple,
                        resolver_artista, responder, ruta_swipl, validar_plan)
 
 

@@ -1,19 +1,18 @@
-"""Prueba HTTP local: python -m unittest chatbot.test_web -v."""
+"""Prueba HTTP local: python -m unittest tests.test_web -v."""
 import json
 import os
 import threading
 import unittest
-from http.server import ThreadingHTTPServer
 from urllib import request, error
 
-from .servidor import Manejador
-from .servicio import cargar_config
+from chatbot.servidor import crear_servidor
+from chatbot.servicio import cargar_config
 
 
 class WebTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.servidor = ThreadingHTTPServer(('127.0.0.1', 0), Manejador)
+        cls.servidor = crear_servidor(0)
         cls.hilo = threading.Thread(target=cls.servidor.serve_forever, daemon=True)
         cls.hilo.start()
         cls.url = 'http://127.0.0.1:' + str(cls.servidor.server_port)
@@ -39,7 +38,8 @@ class WebTests(unittest.TestCase):
             self.assertEqual(json.load(r)['datos'][0]['pais'], 'estados_unidos')
 
     def test_rechaza_solicitud_invalida(self):
-        req = request.Request(self.url + '/api/chat', data=b'[]')
+        req = request.Request(self.url + '/api/chat', data=b'[]',
+                              headers={'Content-Type': 'application/json'})
         with self.assertRaises(error.HTTPError) as exc:
             self.cliente.open(req, timeout=5)
         self.assertEqual(exc.exception.code, 400)

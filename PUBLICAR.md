@@ -9,12 +9,17 @@ Panel: https://dashboard.render.com/web/srv-dbscscon74is739grjl0
 La primera construcción completó el arranque, pero la consulta detectó que SQLite
 tenía permisos de lectura restringidos al usuario de construcción. Se corrigió
 el Dockerfile y se añadió una consulta Prolog al construir como usuario del servicio.
-La conexión LLM requiere configurar GEMINI_API_KEY directamente en el panel.
+La conexión LLM utiliza GEMINI_API_KEY configurada directamente en el panel.
 No hace falta instalar Docker en el computador de la profesora.
 
 Verificación del despliegue corregido: estado `live`, página HTTP 200,
 `/api/estado` indica Prolog disponible y una consulta POST por HTTPS devolvió
-«Metallica: Estados Unidos». Gemini aún no está configurado en el alojamiento.
+«Metallica: Estados Unidos».
+
+Actualización del 15 de noviembre de 2026: la interfaz HTTPS se probó en navegador.
+Prolog respondió el país de Metallica; Gemini respondió los géneros de Opeth y
+el país de Metallica. La clave ya está configurada en el alojamiento. También se
+comprobó el modo Datos y la apertura del detalle de las 31 baladas recuperadas.
 
 ## Configuración preparada
 
@@ -33,7 +38,7 @@ el catálogo, editarlo y desplegar de nuevo. La aplicación no almacena conversa
 1. Crear cuenta en https://dashboard.render.com/register (puedes entrar con GitHub).
 2. Conectar Render a esta conversación para que el agente continúe el despliegue (completado).
 3. Autorizar el acceso al repositorio `jleivav/proyecto2_IA` si Render lo solicita.
-4. Configurar `GEMINI_API_KEY` como variable secreta en Render cuando se cree el servicio.
+4. Configurar `GEMINI_API_KEY` como variable secreta en Render (completado).
    Pegarla directamente en el panel, no en el chat ni en GitHub.
 
 Antes de desplegar, los archivos nuevos deben estar guardados en Git y enviados al
